@@ -1,5 +1,6 @@
 {
     "env":{
-        "MONGODB_PASSWORD":"jpadmin"
+        "MONGODB_PASSWORD":"jpadmin",
+        "JWT_KEY": "bwanakey"
     }
 }

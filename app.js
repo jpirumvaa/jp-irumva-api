@@ -2,9 +2,10 @@ import express from 'express'
 import morgan from 'morgan'
 import bodyParser from "body-parser";
 import mongoose from 'mongoose'
-import blogsRoutes from './src/routes/blogs.js'
-import messagesRoutes from './src/routes/messages.js'
-import commentsRoutes  from './src/routes/comments.js'
+import blogsRoutes from './src/routes/blogs'
+import messagesRoutes from './src/routes/messages'
+import commentsRoutes  from './src/routes/comments'
+import usersRoutes from './src/routes/users'
 
 const app= express()
 mongoose.connect('mongodb+srv://jpirumva:'+ process.env.MONGODB_PASSWORD +'@jpirumvabrand.fc5go.mongodb.net/jpblog?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true }).catch(err=>{
@@ -28,6 +29,7 @@ next()
 app.use('/blogs', blogsRoutes)
 app.use('/messages', messagesRoutes)
 app.use('/comments', commentsRoutes)
+app.use('/users', usersRoutes)
 
 app.use((req,res,next)=>{
     const error = new Error("Not Found")

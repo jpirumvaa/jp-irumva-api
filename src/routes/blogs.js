@@ -1,7 +1,9 @@
 import express from 'express'
-const blogsRoutes = express.Router()
 import Blog from '../models/blogs'
 import mongoose from 'mongoose'
+import {checkAuth} from '../middleware/checkAuth'
+
+const blogsRoutes = express.Router()
 
 blogsRoutes.get('/', (req, res, next)=>{
 Blog.find().select('_id title author body date').exec().then(docs=>{
@@ -13,7 +15,7 @@ Blog.find().select('_id title author body date').exec().then(docs=>{
 })
 })
 
-blogsRoutes.post('/', (req, res, next)=>{
+blogsRoutes.post('/', checkAuth, (req, res, next)=>{
     const blog= new Blog({
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
@@ -45,7 +47,7 @@ blogsRoutes.get('/:blogId', (req, res, next)=>{
     })
 })
 
-blogsRoutes.patch('/:blogId', (req, res, next)=>{
+blogsRoutes.patch('/:blogId', checkAuth, (req, res, next)=>{
     const id= req.params.blogId
     const updateOps={}
     for(const ops of req.body){
@@ -60,7 +62,7 @@ blogsRoutes.patch('/:blogId', (req, res, next)=>{
     })
 })
 
-blogsRoutes.delete('/:blogId', (req, res, next)=>{
+blogsRoutes.delete('/:blogId', checkAuth, (req, res, next)=>{
     const id= req.params.blogId
 Blog.remove({_id: id}).exec().then(results=>{
     console.log(results)

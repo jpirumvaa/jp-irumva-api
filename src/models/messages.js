@@ -1,23 +1,18 @@
 import mongoose from 'mongoose'
-const blogSchema= mongoose.Schema({
+const messagesSchema= mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    title: {
+    email: {
         type: String,
         required: true,
     },
-    author: {
+    message: {
         type: String,
         required: true,
     },
-    body: {
-        type: String,
-        required: true,
-    },
-    date: {
+    name: {
         type: String,
         required: true,
     }
-
 })
 
-export default mongoose.model("Blogs", blogSchema)
+export default mongoose.model("Messages", messagesSchema)

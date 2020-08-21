@@ -1,23 +1,18 @@
 import mongoose from 'mongoose'
-const blogSchema= mongoose.Schema({
+const commentsSchema= mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    title: {
+    comment: {
         type: String,
         required: true,
     },
-    author: {
+    commenter: {
         type: String,
         required: true,
     },
-    body: {
-        type: String,
-        required: true,
-    },
-    date: {
+    commentingTo: {
         type: String,
         required: true,
     }
-
 })
 
-export default mongoose.model("Blogs", blogSchema)
+export default mongoose.model("Comments", commentsSchema)

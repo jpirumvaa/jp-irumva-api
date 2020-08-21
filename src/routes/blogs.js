@@ -4,7 +4,7 @@ import Blog from '../models/blogs'
 import mongoose from 'mongoose'
 
 blogsRoutes.get('/', (req, res, next)=>{
-Blog.find().exec().then(docs=>{
+Blog.find().select('_id title author body date').exec().then(docs=>{
     console.log(docs)
     res.status(200).json(docs)
 }).catch(err=>{
@@ -51,12 +51,12 @@ blogsRoutes.patch('/:blogId', (req, res, next)=>{
     for(const ops of req.body){
         updateOps[ops.propName]= ops.value;
     }
-    Blog.updateOne({_id: id}, {$set:updateOps}).exec().then(results=>{
+    Blog.findOneAndUpdate({_id: id}, {updateOps}).exec().then(results=>{
         console.log(results)
-        req.status(200).json(results)
+        res.status(200).json(results)
     }).catch(err=>{
         console.log(err)
-        req.status(500).json({error: err})
+        res.status(500).json({error: err})
     })
 })
 

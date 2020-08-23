@@ -2,10 +2,10 @@ import express from 'express'
 import morgan from 'morgan'
 import bodyParser from "body-parser";
 import mongoose from 'mongoose'
-import blogsRoutes from './src/routes/blogs'
-import messagesRoutes from './src/routes/messages'
-import commentsRoutes  from './src/routes/comments'
-import usersRoutes from './src/routes/users'
+import blogsRoutes from './routes/blogs'
+import messagesRoutes from './routes/messages'
+import commentsRoutes  from './routes/comments'
+import usersRoutes from './routes/users'
 
 
 const app= express()
@@ -46,6 +46,11 @@ app.use((error, req, res, next)=>{
             message: error.message
         }
     })
+})
+
+const port= process.env.PORT || 5000
+app.listen(port,()=>{
+    console.log("I am running naaa", port)
 })
 
 export default app

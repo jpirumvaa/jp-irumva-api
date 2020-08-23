@@ -2,10 +2,10 @@ import express from 'express'
 import morgan from 'morgan'
 import bodyParser from "body-parser";
 import mongoose from 'mongoose'
-import blogsRoutes from './routes/blogs'
-import messagesRoutes from './routes/messages'
-import commentsRoutes  from './routes/comments'
-import usersRoutes from './routes/users'
+import blogsRoutes from './src/routes/blogs'
+import messagesRoutes from './src/routes/messages'
+import commentsRoutes  from './src/routes/comments'
+import usersRoutes from './src/routes/users'
 
 
 const app= express()

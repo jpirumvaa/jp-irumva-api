@@ -24,7 +24,6 @@ export const getBlogById= (req, res, next)=>{
 
 export const addBlog=(req, res, next)=>{
     const blog= new Blog({
-        _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
         author: req.body.author,
         body: req.body.body,
@@ -47,23 +46,29 @@ export const deleteBlog= (req, res, next)=>{
     const id= req.params.blogId
 Blog.remove({_id: id}).exec().then(results=>{
     console.log(results)
-    res.status(200).json(results)
+    res.status(200).json({
+        "message": "Blog Deleted Successfully",
+        "blog": results
+    })
 }).catch(err=>{
     console.log(err)
     res.status(500).json({error: err})
 })
 }
-export const editBlog= (req, res, next)=>{
-    const id= req.params.blogId
-    const updateOps={}
-    for(const ops of req.body){
-        updateOps[ops.propName]= ops.value;
-    }
-    Blog.findOneAndUpdate({_id: id}, {updateOps}).exec().then(results=>{
-        console.log(results)
-        res.status(200).json(results)
-    }).catch(err=>{
-        console.log(err)
-        res.status(500).json({error: err})
+export const editBlog=  async (req, res, next)=>{
+    const _id= req.params.blogId
+    const selectedBlog= await Blog.findById({_id})
+    console.log(selectedBlog)
+    selectedBlog.set({
+        title: req.body.title || selectedBlog.title,
+        author: req.body.author || selectedBlog.author,
+        body: req.body.body || selectedBlog.body,
+        date: req.body.date || selectedBlog.date,
     })
+    const updatedBlog= await selectedBlog.save()
+
+    return res.status(200).json({
+        "message": "Updated Successfully",
+        updatedBlog
+     })
 }

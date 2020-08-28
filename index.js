@@ -8,10 +8,18 @@ import commentsRoutes  from './src/routes/comments'
 import usersRoutes from './src/routes/users'
 
 
+require("dotenv").config()
+
+
 const app= express()
-mongoose.connect('mongodb+srv://jpirumva:'+ process.env.MONGODB_PASSWORD +'@jpirumvabrand.fc5go.mongodb.net/jpblog?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true }).catch(err=>{
+const mongoString= 'mongodb+srv://jpimanirumva:'+ process.env.MONGODB_PASSWORD +'@jpirumvabrand.fc5go.mongodb.net/jpblog?retryWrites=true&w=majority'
+mongoose.connect(mongoString, 
+{ useNewUrlParser: true, useUnifiedTopology: true }).then(()=>{
+    console.log("Connected")
+}).catch(err=>{
     console.log(err)
 })
+
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: false}) )
 app.use(bodyParser.json())

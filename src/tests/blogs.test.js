@@ -1,7 +1,8 @@
 import request from 'supertest'
 import app from '../../index'
 import Users from '../models/users'
-import bycrypt from 'bcrypt'
+import bcrypt from 'bcrypt'
+import mongoose from 'mongoose'
 
 
 describe("/Blogs", ()=>{
@@ -12,27 +13,30 @@ describe("/Blogs", ()=>{
         done()
     })
 
-    // it("Should post a blog", async(done)=>{
-    //     const password= await bcrypt.hash("hellorwanda", 10)
+    it("Should post a blog", async(done)=>{
+        const password= await bcrypt.hash("hellorwanda", 10)
         
-    //     await new Users({
-    //         email: "jp.irumva@gmail.com",
-    //         password,
-    //         username: "Jean Pierre",
-    //         isAdmin: false        
-    //     }).save()
-    //     const user= await request(app).post('/login').send({
-    //         email: "jp.irumva@gmail.com",
-    //         password: "hellorwanda"
-    //     })
-    //     const res= await request(app).post('/blogs').send({
-    //         title: "req.body.title",
-    //         author: "req.body.author",
-    //         body: "req.body.body",
-    //         date: "req.body.date"
-    //     }).set("")
-    //     expect()
+        await new Users({
+            _id: mongoose.Types.ObjectId(),
+            email: "jp.ivvv@gmail.com",
+            password,
+            username: "Jean Pierre",
+            isAdmin: false        
+        }).save()
+        const user= await request(app).post('/users/login').send({
+            email: "jp.ivvv@gmail.com",
+            password: "hellorwanda"
+        })
+        console.log(user.body)
+        const res= await request(app).post('/blogs').send({
+            title: "req.body.title",
+            author: "req.body.author",
+            body: "req.body.body",
+            date: "req.body.date"
+        }).set("Authorization", `Bearer ${user.body.token}`)
+        expect(res.status).toBe(200)
+        done()
         
                     
-    //})
+    })
 })

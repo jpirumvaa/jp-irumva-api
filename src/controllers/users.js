@@ -27,7 +27,8 @@ export const createUser = (req, res, next)=>{
                         console.log(result)
                         res.status(201).json({
                             message: "User Created Successfully",
-                            result
+                            email: result.email,
+                            username: result.username
                         })
                     }).catch(err=>{
                         console.log(err)
@@ -39,8 +40,28 @@ export const createUser = (req, res, next)=>{
             })
         }
     })
+}
 
 
+export const getUsers= (req, res, next)=>{
+    Users.find().select('_id email').exec().then(docs=>{
+        console.log(docs)
+        res.status(200).json(docs)
+    }).catch(err=>{
+        console.log(err)
+        res.status(500).json({error: err})
+    })
+}
+
+export const getUserById= (req, res, next)=>{
+    const id= req.params.userId;
+    Users.findById(id).exec().then(doc=>{
+        console.log("From DB", doc)
+        res.status(200).json(doc)
+    }).catch(err=>{
+        console.log(err)
+        res.status(500).json({error: err})
+    })
 }
 
 
@@ -78,6 +99,7 @@ export const logUserIn= (req,res,next)=>{
 
 export const deleteUser= (req, res, next)=>{
     const id= req.params.userId
+    console.log(id)
 Users.remove({_id: id}).exec().then(results=>{
     console.log(results)
     res.status(200).json(results)
@@ -85,4 +107,34 @@ Users.remove({_id: id}).exec().then(results=>{
     console.log(err)
     res.status(500).json({error: err})
 })
+}
+
+export const updateProfileInfo=  async (req, res, next)=>{
+    const _id= req.params.userId
+    const selectedUser= await Users.findById({_id})
+    selectedUser.set({
+        email: req.body.email || selectedUser.email,
+        username: req.body.username || selectedUser.username,
+        isAdmin: false
+    })
+    const updatedUser= await selectedUser.save()
+
+    return res.status(200).json({
+        "message": "Updated Successfully",
+        updatedUser
+     })
+}
+
+export const resetPassword=  async (req, res, next)=>{
+    const _id= req.params.userId
+    const selectedUser= await Users.findById({_id})
+    selectedUser.set({
+        password: req.body.password
+    })
+    const updatedUser= await selectedUser.save()
+
+    return res.status(200).json({
+        "message": "Updated Successfully",
+        updatedUser
+     })
 }

@@ -7,13 +7,9 @@ const blogsRoutes = express.Router()
 
 
 blogsRoutes.get('/', getBlogs)
-
 blogsRoutes.post('/', blogsValidation, checkAuth, addBlog)
-
 blogsRoutes.get('/:blogId', getBlogById)
-
 blogsRoutes.put('/:blogId', editBlog)
-
 blogsRoutes.delete('/:blogId', checkAuth, deleteBlog)
 
 

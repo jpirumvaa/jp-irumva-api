@@ -4,7 +4,11 @@ import mongoose from 'mongoose'
 export const getBlogs= (req, res, next)=>{
     Blog.find().select('_id title author body date').exec().then(docs=>{
         console.log(docs)
-        res.status(200).json(docs)
+        const message= docs===null?"Not found": docs
+        
+        res.status(200).json({
+            retrievedBlogs: message
+        })
     }).catch(err=>{
         console.log(err)
         res.status(500).json({error: err})
@@ -24,6 +28,7 @@ export const getBlogById= (req, res, next)=>{
 
 export const addBlog=(req, res, next)=>{
     const blog= new Blog({
+        _id: mongoose.Schema.Types.ObjectId(),
         title: req.body.title,
         author: req.body.author,
         body: req.body.body,
@@ -58,8 +63,8 @@ Blog.remove({_id: id}).exec().then(results=>{
 export const editBlog=  async (req, res, next)=>{
     const _id= req.params.blogId
     const selectedBlog= await Blog.findById({_id})
-    console.log(selectedBlog)
     selectedBlog.set({
+        _id: mongoose.Types.ObjectId(),
         title: req.body.title || selectedBlog.title,
         author: req.body.author || selectedBlog.author,
         body: req.body.body || selectedBlog.body,

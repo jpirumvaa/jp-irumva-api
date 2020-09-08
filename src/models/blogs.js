@@ -15,8 +15,15 @@ const blogSchema= mongoose.Schema({
     date: {
         type: String,
         required: true,
-    }
-
+    },
+    avatarURL: {
+        type: String,
+        required: true,
+    },
+    dateofPublication: {
+        type: String,
+        required: true,
+    },
 })
 
 export default mongoose.model("Blogs", blogSchema)

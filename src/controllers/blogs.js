@@ -2,7 +2,7 @@ import Blog from '../models/blogs'
 import mongoose from 'mongoose'
 
 export const getBlogs= (req, res, next)=>{
-    Blog.find().select('_id title author body date').exec().then(docs=>{
+    Blog.find().select('_id title author body date avatarURL dateofPublication').exec().then(docs=>{
         console.log(docs)
         const message= docs===null?"Not found": docs
         
@@ -28,11 +28,13 @@ export const getBlogById= (req, res, next)=>{
 
 export const addBlog=(req, res, next)=>{
     const blog= new Blog({
-        _id: mongoose.Schema.Types.ObjectId(),
+        _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
         author: req.body.author,
         body: req.body.body,
-        date: req.body.date
+        date: req.body.date,
+        avatarURL: req.body.avatarURL,
+        dateofPublication: req.body.dateofPublication
     })
     blog.save().then(result=>{
         console.log(result)
@@ -64,11 +66,13 @@ export const editBlog=  async (req, res, next)=>{
     const _id= req.params.blogId
     const selectedBlog= await Blog.findById({_id})
     selectedBlog.set({
-        _id: mongoose.Types.ObjectId(),
+        _id: new mongoose.Types.ObjectId(),
         title: req.body.title || selectedBlog.title,
         author: req.body.author || selectedBlog.author,
         body: req.body.body || selectedBlog.body,
         date: req.body.date || selectedBlog.date,
+        avatarURL: req.body.avatarURL|| selectedBlog.avatarURL,      
+        dateofPublication:req.body.dateofPublication || selectedBlog.dateofPublication,
     })
     const updatedBlog= await selectedBlog.save()
 

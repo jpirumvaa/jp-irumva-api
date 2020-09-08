@@ -6,6 +6,7 @@ import blogsRoutes from './src/routes/blogs'
 import messagesRoutes from './src/routes/messages'
 import commentsRoutes  from './src/routes/comments'
 import usersRoutes from './src/routes/users'
+import cors from 'cors'
 
 
 require("dotenv").config()
@@ -20,20 +21,23 @@ mongoose.connect(mongoString,
     console.log(err)
 })
 
+app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: false}) )
-app.use(bodyParser.json())
+//app.use(bodyParser.json())
+app.use(express.json({limit: '5mb'}))
 
-app.use((req, res, next)=>{
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization")
-    if(req.method==="OPTIONS"){
-        res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE")
-        return res.status(200).json({})
-    }
-next()
-})
+// app.use((req, res, next)=>{
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+//     if(req.method==="OPTIONS"){
+//         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE")
+//         return res.status(200).json({})
+//     }
+// next()
+// })
+
 
 app.use('/blogs', blogsRoutes)
 app.use('/messages', messagesRoutes)
